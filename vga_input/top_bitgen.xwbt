@@ -1,0 +1,8 @@
+INTSTYLE=ise
+INFILE=C:\Users\ZephRay\Documents\GitHub\vga_to_ascii\vga_input\top.ncd
+OUTFILE=C:\Users\ZephRay\Documents\GitHub\vga_to_ascii\vga_input\top.bit
+FAMILY=Virtex5
+PART=xc5vlx50t-1ff1136
+WORKINGDIR=C:\Users\ZephRay\Documents\GitHub\vga_to_ascii\vga_input
+LICENSE=WebPack
+USER_INFO=211318806_0_0_510
