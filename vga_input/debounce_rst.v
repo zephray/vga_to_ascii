@@ -19,9 +19,9 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module debounce_rst(
-    input clk,
-    input noisy_rst,
-	 input pll_locked,
+    input wire clk,
+    input wire noisy_rst,
+	 input wire pll_locked,
     output clean_pll_rst,
 	 output clean_async_rst
     );

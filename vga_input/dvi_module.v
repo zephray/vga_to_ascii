@@ -96,7 +96,7 @@ module dvi_module(//Outputs
       .Reset  (gpuclk_rst),
       .Pixel_clk_greater_than_65Mhz(1'b0)
       );
-
+    
   (* IODELAY_GROUP = "IODELAY_MIG" *)IODELAY delay_p (
     .ODATAIN(dvi_xclk_p_nodly),
     .DATAOUT(dvi_xclk_p),

@@ -1,7 +1,8 @@
 `timescale 1ns / 1ps
+`default_nettype wire
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
-// Engineer: 
+// Engineer: Wenting Zhang
 // 
 // Create Date:    15:28:19 01/27/2018 
 // Design Name: 
@@ -18,51 +19,10 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module top(
-  //Audio
-  /*output         AUDIO_SDATA_OUT,
-  output         AUDIO_BIT_CLK,
-  input          AUDIO_SDATA_IN,
-  output         AUDIO_SYNC,
-  output         FLASH_AUDIO_RESET_B,*/
-
-  //SRAM & Flash
-  //output [30:0]  SRAM_FLASH_A,
-  //inout  [15:0]  SRAM_FLASH_D,
-  //inout  [31:16] SRAM_D,
-  //inout  [3:0]   SRAM_DQP,
-  //output [3:0]   SRAM_BW,
-  //output         SRAM_FLASH_WE_B,
-  //output         SRAM_CLK,
-  //output         SRAM_CS_B,
-  //output         SRAM_OE_B,
-  //output         SRAM_MODE,
-  //output         SRAM_ADV_LD_B,
-  //output         FLASH_CE_B,
-  //output         FLASH_OE_B,
-  //output         FLASH_CLK,
-  //output         FLASH_ADV_B,
-  //output         FLASH_WAIT,
-  
-  //UART
-  /*output         FPGA_SERIAL1_TX,
-  input          FPGA_SERIAL1_RX,
-  output         FPGA_SERIAL2_TX,
-  input          FPGA_SERIAL2_RX,*/
-  
+module top(  
   //IIC
-  /*output         IIC_SCL_MAIN,
-  inout          IIC_SDA_MAIN,*/
   inout          IIC_SCL_VIDEO,
   inout          IIC_SDA_VIDEO,
-  /*output         IIC_SCL_SFP,
-  inout          IIC_SDA_SFP,*/
-  
-  //PS2
-  /*output         MOUSE_CLK,
-  input          MOUSE_DATA,
-  output         KEYBOARD_CLK,
-  inout          KEYBOARD_DATA,*/
   
   //VGA IN
   input          VGA_IN_DATA_CLK,
@@ -89,26 +49,6 @@ module top(
   output         GPIO_LED_E,
   output         GPIO_LED_S,
   output         GPIO_LED_N,
-
-  //DDR2
-  /*inout  [63:0]  DDR2_D,
-  output [12:0]  DDR2_A,
-  output [1:0]   DDR2_CLK_P,
-  output [1:0]   DDR2_CLK_N,
-  output [1:0]   DDR2_CE,
-  output [1:0]   DDR2_CS_B,
-  output [1:0]   DDR2_ODT,
-  output         DDR2_RAS_B,
-  output         DDR2_CAS_B,
-  output         DDR2_WE_B,
-  output [1:0]   DDR2_BA,
-  output [7:0]   DDR2_DQS_P,
-  output [7:0]   DDR2_DQS_N,
-  output         DDR2_SCL,
-  inout          DDR2_SDA,*/
-  
-  //Speaker
-  //output         PIEZO_SPEAKER,
   
   //DVI
   output [11:0]  DVI_D,
@@ -163,7 +103,7 @@ module top(
         .clean_pll_rst(reset_pll),
         .clean_async_rst(reset)
     );
-    //
+    //assign reset = reset_in;
     
     wire iic_done;
     
@@ -174,10 +114,13 @@ module top(
     wire [7:0] b_in = VGA_IN_BLUE;
     wire pclk_in = VGA_IN_DATA_CLK;
     
-    //Only use one pixel
-    reg [7:0] buf_r [0:99]; 
-    reg [7:0] buf_g [0:99];
-    reg [7:0] buf_b [0:99];
+    //Double buffering...
+    reg [14:0] avg_r_a [0:99]; 
+    reg [14:0] avg_g_a [0:99];
+    reg [14:0] avg_b_a [0:99];
+    reg [14:0] avg_r_b [0:99]; 
+    reg [14:0] avg_g_b [0:99];
+    reg [14:0] avg_b_b [0:99];
     reg disp_buffer;
     reg [10:0] x_counter; // 0-2047
     reg [10:0] y_counter; 
@@ -191,30 +134,21 @@ module top(
     
     wire x_valid = ((x_counter >= x_offset)&&(x_counter < (x_offset + x_size))) ? 1 : 0;
     wire y_valid = ((y_counter >= y_offset)&&(y_counter < (y_offset + y_size))) ? 1 : 0;
+    wire y_valid_output = ((y_counter >= (y_offset + 11'd16))&&(y_counter < (y_offset + y_size + 11'd16))) ? 1 : 0;
     wire [10:0] x_position = (x_valid) ? (x_counter - x_offset) : 11'd0;
     wire [10:0] y_position = (y_valid) ? (y_counter - y_offset) : 11'd0;
     
-    wire [6:0] buf_addr = (x_position / 8);
-    wire buf_wr = ((y_position[3:0] == 4'b0000)&&(x_position[2:0] == 3'b000)) ? 1 : 0;
-    
-    reg [7:0] r_out;
-    reg [7:0] g_out;
-    reg [7:0] b_out;
-    
-    always@(negedge pclk_in)
-    begin
-        if (buf_wr) begin
-            buf_r[buf_addr] <= r_in;
-            buf_g[buf_addr] <= g_in;
-            buf_b[buf_addr] <= b_in;
-        end
-    end
+    wire [6:0] avg_addr = (x_position / 8);
+    wire avg_clear = ((y_position[3:0] == 4'b0000)&&(x_position[2:0] == 3'b000)) ? 1 : 0;
     
     always@(posedge pclk_in)
     begin
         if (reset) begin
             vs_last <= 0;
             hs_last <= 0;
+            x_counter <= 0;
+            y_counter <= 0;
+            disp_buffer <= 0;
         end
         else begin
             hs_last <= hs_in;
@@ -222,20 +156,65 @@ module top(
             if ((hs_last == 1'b0)&&(hs_in == 1'b1)) begin
                 x_counter <= 0;
                 y_counter <= y_counter + 1;
-                if (y_counter[3:0] == 4'b0000)
+                if (y_position[3:0] == 4'b1111)
                     disp_buffer <= ~disp_buffer;
             end else
                 x_counter <= x_counter + 1;
             if ((vs_last == 1'b0)&&(vs_in == 1'b1)) begin
                 y_counter <= 0;
             end
-            
-            r_out <= buf_r[buf_addr];
-            g_out <= buf_g[buf_addr];
-            b_out <= buf_b[buf_addr];
+            if (x_valid && y_valid) begin
+                if (disp_buffer) begin
+                    avg_r_a[avg_addr] <= ((avg_clear) ? (14'b0) : (avg_r_a[avg_addr])) + r_in;
+                    avg_g_a[avg_addr] <= ((avg_clear) ? (14'b0) : (avg_g_a[avg_addr])) + g_in;
+                    avg_b_a[avg_addr] <= ((avg_clear) ? (14'b0) : (avg_b_a[avg_addr])) + b_in;
+                end
+                else begin
+                    avg_r_b[avg_addr] <= ((avg_clear) ? (14'b0) : (avg_r_b[avg_addr])) + r_in;
+                    avg_g_b[avg_addr] <= ((avg_clear) ? (14'b0) : (avg_g_b[avg_addr])) + g_in;
+                    avg_b_b[avg_addr] <= ((avg_clear) ? (14'b0) : (avg_b_b[avg_addr])) + b_in;
+                end
+            end
         end
     end
-
+    
+    wire out_en = (x_valid & y_valid_output);
+    
+    wire [7:0] avg_r_out = disp_buffer ? avg_r_b[avg_addr][14:7] : avg_r_a[avg_addr][14:7];
+    wire [7:0] avg_g_out = disp_buffer ? avg_g_b[avg_addr][14:7] : avg_g_a[avg_addr][14:7];
+    wire [7:0] avg_b_out = disp_buffer ? avg_b_b[avg_addr][14:7] : avg_b_a[avg_addr][14:7];
+    wire [5:0] char_sel = (avg_r_out + avg_g_out + avg_b_out) / 16; 
+    wire [7:0] char;
+    wire char_out;
+    
+    ascii_lut ascii_lut(
+        .id(char_sel),
+        .char(char)
+    );
+    
+    vga_font vga_font(
+        .clk(VGA_IN_DATA_CLK),
+        .ascii_code(char),
+        .row(y_position[3:0]),
+        .col(x_position[2:0]),
+        .pixel(char_out)
+    );
+    
+    reg [7:0] char_r_out;
+    reg [7:0] char_g_out;
+    reg [7:0] char_b_out;
+    
+    always@(negedge VGA_IN_DATA_CLK)
+    begin
+        char_r_out <= (char_out) ? ((GPIO_DIP_SW[0]) ? (avg_r_out) : (8'hFF)) : (8'h00);
+        char_g_out <= (char_out) ? ((GPIO_DIP_SW[0]) ? (avg_g_out) : (8'hFF)) : (8'h00);
+        char_b_out <= (char_out) ? ((GPIO_DIP_SW[0]) ? (avg_b_out) : (8'hFF)) : (8'h00);
+    end
+    
+    wire [7:0] r_out = (out_en) ? ((GPIO_DIP_SW[1]) ? (char_r_out) : (r_in)) : 8'h00;
+    wire [7:0] g_out = (out_en) ? ((GPIO_DIP_SW[1]) ? (char_g_out) : (g_in)) : 8'h00;
+    wire [7:0] b_out = (out_en) ? ((GPIO_DIP_SW[1]) ? (char_b_out) : (b_in)) : 8'h00;
+    
     dvi_module dvi_module(  
         //Outputs
         .dvi_vs(DVI_V),        
@@ -256,16 +235,16 @@ module top(
         .gpuclk_rst(reset), 
         .hsync(~VGA_IN_HSOUT),
         .vsync(~VGA_IN_VSOUT),
-        .blank_b((x_valid & y_valid)),
+        .blank_b(out_en),
         .pixel_r(r_out),
         .pixel_b(b_out),
         .pixel_g(g_out)
     );
 
 
-    assign GPIO_LED[7:0] = {buf_addr[6:0], buf_wr};
+    assign GPIO_LED[7:0] = {char};
     assign GPIO_LED_C = iic_done;
-    assign GPIO_LED_S = r_out[7];
+    assign GPIO_LED_S = char_out;
     assign GPIO_LED_W = 0;
     assign GPIO_LED_N = 0;
     assign GPIO_LED_E = 0;

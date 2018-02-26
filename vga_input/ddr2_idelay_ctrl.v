@@ -1,5 +1,4 @@
 `timescale 1ns / 1ps
-`default_nettype none
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
 // Engineer: 
@@ -27,8 +26,8 @@ module ddr2_idelay_ctrl #(
   parameter IODELAY_GRP = "IODELAY_MIG"
 ) (
   output idelay_ctrl_rdy,
-  input clk200,
-  input rst200
+  input wire clk200,
+  input wire rst200
 );
   
   (* IODELAY_GROUP = IODELAY_GRP *) IDELAYCTRL u_idelayctrl

@@ -1,5 +1,5 @@
 `timescale 1 ns / 100 ps
-`default_nettype none
+`default_nettype wire
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
 // Engineer: The Fighting Meerkat

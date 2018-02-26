@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- IMPORTANT: This is an internal file that has been generated
+     by the Xilinx ISE software.  Any direct editing or
+     changes made to this file may result in unpredictable
+     behavior or data corruption.  It is strongly advised that
+     users do not edit the contents of this file. -->
+<messages>
+<msg type="warning" file="HDLCompiler" num="1016" delta="unknown" >"C:/Users/ZephRay/Documents/GitHub/vga_to_ascii/vga_input/x2_dcm.v" Line 35: Port <arg fmt="%s" index="1">CLK180</arg> is not connected to this instance
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="1016" delta="unknown" >"C:/Users/ZephRay/Documents/GitHub/vga_to_ascii/vga_input/dvi_module.v" Line 100: Port <arg fmt="%s" index="1">CE</arg> is not connected to this instance
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="1016" delta="unknown" >"C:/Users/ZephRay/Documents/GitHub/vga_to_ascii/vga_input/dvi_module.v" Line 111: Port <arg fmt="%s" index="1">CE</arg> is not connected to this instance
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="189" delta="unknown" >"C:/Users/ZephRay/Documents/GitHub/vga_to_ascii/vga_input/dvi_module.v" Line 68: Size mismatch in connection of port &lt;<arg fmt="%s" index="3">R</arg>&gt;. Formal port size is <arg fmt="%d" index="2">1</arg>-bit while actual signal size is <arg fmt="%d" index="1">32</arg>-bit.
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="189" delta="unknown" >"C:/Users/ZephRay/Documents/GitHub/vga_to_ascii/vga_input/dvi_module.v" Line 69: Size mismatch in connection of port &lt;<arg fmt="%s" index="3">R</arg>&gt;. Formal port size is <arg fmt="%d" index="2">1</arg>-bit while actual signal size is <arg fmt="%d" index="1">32</arg>-bit.
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="189" delta="unknown" >"C:/Users/ZephRay/Documents/GitHub/vga_to_ascii/vga_input/dvi_module.v" Line 75: Size mismatch in connection of port &lt;<arg fmt="%s" index="3">R</arg>&gt;. Formal port size is <arg fmt="%d" index="2">1</arg>-bit while actual signal size is <arg fmt="%d" index="1">32</arg>-bit.
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="189" delta="unknown" >"C:/Users/ZephRay/Documents/GitHub/vga_to_ascii/vga_input/dvi_module.v" Line 76: Size mismatch in connection of port &lt;<arg fmt="%s" index="3">R</arg>&gt;. Formal port size is <arg fmt="%d" index="2">1</arg>-bit while actual signal size is <arg fmt="%d" index="1">32</arg>-bit.
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="189" delta="unknown" >"C:/Users/ZephRay/Documents/GitHub/vga_to_ascii/vga_input/dvi_module.v" Line 77: Size mismatch in connection of port &lt;<arg fmt="%s" index="3">R</arg>&gt;. Formal port size is <arg fmt="%d" index="2">1</arg>-bit while actual signal size is <arg fmt="%d" index="1">32</arg>-bit.
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="189" delta="unknown" >"C:/Users/ZephRay/Documents/GitHub/vga_to_ascii/vga_input/dvi_module.v" Line 78: Size mismatch in connection of port &lt;<arg fmt="%s" index="3">R</arg>&gt;. Formal port size is <arg fmt="%d" index="2">1</arg>-bit while actual signal size is <arg fmt="%d" index="1">32</arg>-bit.
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="189" delta="unknown" >"C:/Users/ZephRay/Documents/GitHub/vga_to_ascii/vga_input/dvi_module.v" Line 79: Size mismatch in connection of port &lt;<arg fmt="%s" index="3">R</arg>&gt;. Formal port size is <arg fmt="%d" index="2">1</arg>-bit while actual signal size is <arg fmt="%d" index="1">32</arg>-bit.
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="189" delta="unknown" >"C:/Users/ZephRay/Documents/GitHub/vga_to_ascii/vga_input/dvi_module.v" Line 80: Size mismatch in connection of port &lt;<arg fmt="%s" index="3">R</arg>&gt;. Formal port size is <arg fmt="%d" index="2">1</arg>-bit while actual signal size is <arg fmt="%d" index="1">32</arg>-bit.
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="189" delta="unknown" >"C:/Users/ZephRay/Documents/GitHub/vga_to_ascii/vga_input/dvi_module.v" Line 81: Size mismatch in connection of port &lt;<arg fmt="%s" index="3">R</arg>&gt;. Formal port size is <arg fmt="%d" index="2">1</arg>-bit while actual signal size is <arg fmt="%d" index="1">32</arg>-bit.
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="189" delta="unknown" >"C:/Users/ZephRay/Documents/GitHub/vga_to_ascii/vga_input/dvi_module.v" Line 82: Size mismatch in connection of port &lt;<arg fmt="%s" index="3">R</arg>&gt;. Formal port size is <arg fmt="%d" index="2">1</arg>-bit while actual signal size is <arg fmt="%d" index="1">32</arg>-bit.
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="189" delta="unknown" >"C:/Users/ZephRay/Documents/GitHub/vga_to_ascii/vga_input/dvi_module.v" Line 83: Size mismatch in connection of port &lt;<arg fmt="%s" index="3">R</arg>&gt;. Formal port size is <arg fmt="%d" index="2">1</arg>-bit while actual signal size is <arg fmt="%d" index="1">32</arg>-bit.
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="189" delta="unknown" >"C:/Users/ZephRay/Documents/GitHub/vga_to_ascii/vga_input/dvi_module.v" Line 84: Size mismatch in connection of port &lt;<arg fmt="%s" index="3">R</arg>&gt;. Formal port size is <arg fmt="%d" index="2">1</arg>-bit while actual signal size is <arg fmt="%d" index="1">32</arg>-bit.
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="189" delta="unknown" >"C:/Users/ZephRay/Documents/GitHub/vga_to_ascii/vga_input/dvi_module.v" Line 85: Size mismatch in connection of port &lt;<arg fmt="%s" index="3">R</arg>&gt;. Formal port size is <arg fmt="%d" index="2">1</arg>-bit while actual signal size is <arg fmt="%d" index="1">32</arg>-bit.
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="189" delta="unknown" >"C:/Users/ZephRay/Documents/GitHub/vga_to_ascii/vga_input/dvi_module.v" Line 86: Size mismatch in connection of port &lt;<arg fmt="%s" index="3">R</arg>&gt;. Formal port size is <arg fmt="%d" index="2">1</arg>-bit while actual signal size is <arg fmt="%d" index="1">32</arg>-bit.
+</msg>
+
+</messages>
+
